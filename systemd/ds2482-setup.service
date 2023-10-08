@@ -1,0 +1,12 @@
+[Unit]
+Description=Setup DS2482 1wire bus master
+After=local-fs.target
+
+[Service]
+ExecStart=/usr/local/sbin/ds2482-setup start
+RemainAfterExit=true
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=onewire-prometheus-exporter.service

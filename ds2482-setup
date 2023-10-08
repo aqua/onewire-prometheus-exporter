@@ -1,0 +1,24 @@
+#!/bin/sh
+
+set -e
+
+# These may vary with your hardware
+I2C_BUS=0
+DS2482_ADDR=0x18
+[ -r /etc/default/ds2482 ] && . /etc/default/ds2482
+
+case "$1" in
+start)
+        sleep 1
+        echo "Enabling DS2484 bus master at $DS2482_ADDR"
+        echo ds2482 ${DS2482_ADDR?} > /sys/bus/i2c/devices/i2c-${I2C_BUS?}/new_device
+        ;;
+stop)
+        echo "Disabling DS2484 bus master on i2c bus $I2C_BUS"
+        echo ${DS2482_ADDR?} > /sys/bus/i2c/devices/i2c-${I2C_BUS?}/delete_device
+        ;;
+restart|reload|force-reload) log_daemon_msg "Resetting DS2482 device" "ds2482"
+        $0 stop
+        $0 start
+esac
+exit 0

@@ -1,0 +1,14 @@
+[Unit]
+Description=1Wire temperature sensor prometheus exporter
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/onewire-prometheus-exporter
+Restart=on-failure
+RestartSec=2s
+Type=simple
+DynamicUser=true
+
+[Install]
+WantedBy=multi-user.target
+Alias=onewire-prometheus-exporter.service
