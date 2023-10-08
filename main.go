@@ -52,13 +52,15 @@ func main() {
 		ids = []string{*onlyDevice}
 	}
 
-	devices := make([]*onewire.DS18S20, len(ids))
-	for i, id := range ids {
-		func(i int, ID string) {
-			if devices[i], err = onewire.NewDS18S20(ID); err != nil {
-				log.Printf("Error opening %s as a DS18S20 device (%v); skipping it", id, err)
+	devices := []*onewire.DS18S20{}
+	for _, id := range ids {
+		func(ID string) {
+			if d, err := onewire.NewDS18S20(ID); err != nil {
+				log.Printf("Error opening %s as a DS18S20 device (%v); skipping it", ID, err)
+			} else {
+				devices = append(devices, d)
 			}
-		}(i, id)
+		}(id)
 	}
 	export(devices)
 
